@@ -1,0 +1,53 @@
+data:
+  train_csv_path: ../wood_dataset/train/train_labels.csv
+  test_csv_path: ../wood_dataset/test/test_AND_labels.csv
+  resize:
+    h: &h 256
+    w: &w 256
+  crop:
+    flag: False
+    h: &crop_h 224
+    w: &crop_w 224
+  
+model:
+  backbone: wide_resnet50_2 # ['resnet18', 'wide_resnet50_2']
+
+cfa:
+  patch_discriptor:
+    gamma_d: 1
+  memory_bank_compression: 
+    method: centroid # ['centroid', 'mini_batch_kmeans', 'kcenter_greedy']
+    scale_for_cluster: 24
+  loss:
+    loss_att:
+      r: &r 1e-5
+      K: &K 3
+    loss_rep:
+      J: &J 3
+      alpha: 1e-1
+    nu: 1e-3
+  test:
+    softmin_K: *K
+
+optimizer:
+  method: adamw # ['adam', 'adamw', 'sgd']
+  adam: 
+    lr: 1e-3
+    beta1: 0.9
+    beta2: 0.999
+    weight_decay: 5e-4
+  adamw:
+    lr: 1e-3
+    beta1: 0.9
+    beta2: 0.999
+    weight_decay: 5e-4
+  sgd:
+    lr: 1e-3
+    weight_decay: 5e-4
+
+
+trainer:
+  num_epoch: 30
+  save_root_path: ./result
+  
+
